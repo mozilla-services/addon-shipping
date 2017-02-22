@@ -1,0 +1,8 @@
+{
+  "name": "addons",
+  "description": "",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::927034868273:role/addons_lambda_function",
+  "environment": {}
+}
