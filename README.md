@@ -6,7 +6,7 @@ The first milestone a prototype that ships systems addons. This is a good place 
 
 ## Development
 
-We're hacking out a prototype. Speed is most important but we also want some process. For now, file an PR with code or closing an issue, get it reviewed and merge it into squash merge it into master. 
+We're hacking out a prototype. Speed is most important but we also want some process. For now, file an PR with code or closing an issue, get it reviewed and squash merge it into master. 
 
 We may create a more formal contribution process if/when we are sure step functions are the right approach. 
 
