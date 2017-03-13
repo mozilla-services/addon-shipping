@@ -24,19 +24,19 @@ impl Error for DummyError {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct S3BucketInfo {
     name: String,
     arn: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct S3ObjectInfo {
     key: String,
     size: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct S3Path {
     bucket: S3BucketInfo,
     object: S3ObjectInfo,
@@ -56,11 +56,33 @@ struct S3BatchEvent {
     records: Vec<S3Event>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+enum S3EventResponse {
+    SkipFileNotXPI(String),
+    SkipEventNotObjectCreated(String),
+    UploadedXPI(S3Path),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct S3BatchResponse {
+    responses: Vec<S3EventResponse>
+}
+
 fn main() {
     rust_apex::run::<_, _, DummyError, _>(|input: S3BatchEvent, c: rust_apex::Context| {
-        let mut bt = BTreeMap::new();
-        bt.insert("c", to_value(&c).unwrap());
-        bt.insert("i", to_value(&input).unwrap());
-        Ok(bt)
+        let responses = input.records.iter().map(|event| {
+            let ref filename = event.s3.object.key;
+            if !filename.ends_with(".xpi") {
+                return S3EventResponse::SkipFileNotXPI(filename.clone());
+            }
+
+            if !event.event_name.starts_with("ObjectCreated") {
+                return S3EventResponse::SkipEventNotObjectCreated(event.event_name.clone());
+            }
+
+            // FIXME: point to some other XPI
+            S3EventResponse::UploadedXPI(event.s3.clone())
+        }).collect();
+        Ok(S3BatchResponse { responses: responses })
     });
 }
