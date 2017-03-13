@@ -1,0 +1,8 @@
+[package]
+name = "sign-xpi"
+version = "0.1.0"
+authors = ["Ethan Glasser-Camp <eglassercamp@mozilla.com>"]
+
+[dependencies]
+rust-apex = "0.2"
+serde_json = "0.9"
