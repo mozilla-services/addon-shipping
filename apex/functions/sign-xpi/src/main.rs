@@ -1,4 +1,6 @@
 extern crate rust_apex;
+#[macro_use]
+extern crate serde_derive;
 extern crate serde_json;
 
 use std::error::Error;
@@ -22,11 +24,43 @@ impl Error for DummyError {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct S3BucketInfo {
+    name: String,
+    arn: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct S3ObjectInfo {
+    key: String,
+    size: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct S3Path {
+    bucket: S3BucketInfo,
+    object: S3ObjectInfo,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct S3Event {
+    event_time: String,
+    event_name: String,  // FIXME: enum
+    s3: S3Path,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct S3BatchEvent {
+    #[serde(rename = "Records")]
+    records: Vec<S3Event>,
+}
+
 fn main() {
-    rust_apex::run::<_, _, DummyError, _>(|input: Value, c: rust_apex::Context| {
+    rust_apex::run::<_, _, DummyError, _>(|input: S3BatchEvent, c: rust_apex::Context| {
         let mut bt = BTreeMap::new();
         bt.insert("c", to_value(&c).unwrap());
-        bt.insert("i", input);
+        bt.insert("i", to_value(&input).unwrap());
         Ok(bt)
     });
 }
