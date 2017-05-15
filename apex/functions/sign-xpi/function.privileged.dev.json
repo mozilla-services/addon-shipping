@@ -1,0 +1,15 @@
+{
+  "runtime": "python",
+  "description": "The sign-xpi lambda with a set of credentials for privileged addons",
+  "timeout": 30,
+  "hooks": {
+    "build": "pip install -r requirements.txt -t site-packages"
+  },
+  "environment": {
+    "autograph_serverUrl": "http://52.91.167.168:8000/",
+    "autograph_hawkId": "alice",
+    "autograph_hawkSecret": "fs5wgcer9qj819kfptdlp8gm227ewxnzvsuj9ztycsx08hfhzu",
+    "autograph_keyId": "extensions-ecdsa",
+    "outputBucket": "eglassercamp-addon-sign-xpi-output"
+  }
+}

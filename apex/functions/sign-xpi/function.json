@@ -1,0 +1,7 @@
+{
+  "runtime": "python",
+  "description": "Lambda to sign an XPI file using Autograph",
+  "hooks":{
+    "build": "pip install -r requirements.txt -t site-packages"
+  }
+}
