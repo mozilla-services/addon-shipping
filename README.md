@@ -1,3 +1,7 @@
+# 301 Moved Permanently
+
+This repo has been shrunk down and moved to https://github.com/mozilla-services/sign-xpi/. What remains is left here for historical purposes only.
+
 # About
 
 This project uses AWS Step Function state machines to manage the workflow for shipping system addons. This project is **EXPERIMENTAL**. The goal is to learn and determine if AWS Step Functions are appropriate for managing addon work flows. 
